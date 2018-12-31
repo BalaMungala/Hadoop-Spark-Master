@@ -1,0 +1,16 @@
+Yarn Process:-
+
+User Submits a application to the cluster
+RM (resource manager) Creates an application ID
+RM starts a container Called as XapplicationMaster(Where X= MapReduce Or Spark or TEZ etc)
+AM(Application Master) Figures out how many number of mapper or Reducers are required to run that Application
+AM goes to the resource Manager and Asks for the Required Containers (Yarn child container)
+Resource manager goes to the Node Manager and asks to create the YC Containers
+Node Manager Creates the container and AM runs the Map/Reduce tasks in those Containers
+Once the app is finished , Am daemon is killed and all the the YC containers processes are also killed.
+
+Note:- a: There will always be one application master per application.
+		b: Resource manager Will connect with Namenode to figure out the Block IDs/Block locations of the input data.
+		c:Depending upon the location of the blocks of the input data, RM will always ask those Node Managers to create the YC containers where the Blocks of the data exist.
+		
+
