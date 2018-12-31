@@ -1,0 +1,38 @@
+What are the key components of YARN?
+
+The basic idea of YARN is to split the functionality of resource management and job scheduling/monitoring into separate daemons. YARN consists of the following different components
+
+ResourceManager - The ResourceManager is a global component or daemon, one per cluster, which manages the requests to and resources across the nodes of the cluster.
+
+NodeManager - NodeManger runs on each node of the cluster and is responsible for launching and monitoring containers and reporting the status back to the ResourceManager
+
+ApplicationMaster is a per-application component that is responsible for negotiating resource requirements for the resource manager and working with NodeManagers to execute and monitor the tasks.
+
+Container Container is YARN framework is a unix process running on the node that executes an application-specific process with a constrained set of resources (Memory, CPU, etc.)
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+What is ResourceManager in YARN?
+ 
+The YARN ResourceManager is a global component or daemon, one per cluster, which manages the requests to and resources across the nodes of the cluster.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+The ResourceManager has two main components - Scheduler and ApplicationsManager
+
+Scheduler - The scheduler is responsible for allocating resources to and starting applications based on the abstract notion of resource containers having a constrained set of resources.
+
+ApplicationManager - The ApplicationsManager is responsible for accepting job-submissions, negotiating the first container for executing the application specific ApplicationMaster and provides the service for restarting the ApplicationMaster container on failure.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+What are the scheduling policies available in YARN?
+
+YARN scheduler is responsible for scheduling resources to user applications based on a defined scheduling policy. YARN provides three scheduling options - FIFO scheduler, Capacity scheduler and Fair scheduler.
+
+FIFO Scheduler - FIFO scheduler puts application requests in queue and runs them in the order of submission.
+
+Capacity Scheduler - Capacity scheduler has a separate dedicated queue for smaller jobs and starts them as soon as they are submitted.
+
+Fair Scheduler - Fair scheduler dynamically balances and allocates resources between all the running jobs.
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+How do you setup ResourceManager to use FairScheduler?
+
+You can configure the ResourceManager to use FairScheduler by setting the value of property 'yarn.resourcemanager.scheduler.class' to 'org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler' in the file 'conf/yarn-site.xml'.
