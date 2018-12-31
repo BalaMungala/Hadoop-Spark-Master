@@ -1,0 +1,42 @@
+Decommission
+
+su - hdfs
+hdfs dfs -setrep -R -w 2 /
+
+
+
+Decommission
+
+su - hdfs
+hdfs dfs -setrep -R -w 2 /
+
+
+#############
+to balance the cluster
+
+su - hdfs
+hdfs balancer
+
+
+hdfs balancer -threshold
+hdfs balancer -threshold 85
+
+hdfs dfsadmin -report
+
+
+**************************** how to put the file in HDFS**********************************
+[root@master ~] cd home
+[root@master home]# sudo vi mydata.txt
+
+[root@master home]# su - hdfs
+
+[hdfs@master ~]$ $HADOOP_HOME/bin/hadoop fs -put /home/mydata.txt /mydata
+
+
+Run a job "with out schedular" :-
+
+[hdfs@master ~]$ hadoop jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.14.2.jar wordcount /mydata/mydata.txt /mydata/hi
+
+Run a job with  "schedular":-
+
+[hdfs@master ~]$ hadoop jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.14.2.jar wordcount -Dmapred.job.queue.name=root.prod /mydata/mydata.txt /mydata/hi
