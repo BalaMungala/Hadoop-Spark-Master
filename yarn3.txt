@@ -1,0 +1,10 @@
+Application work flow in YARN:-
+
+1:- clint submits an application
+2:-RM allocates a conatier to start the AM
+3:-AM register with RM
+4:- AM asks container from RM
+5:-AM notifies NM to launch the container,
+6:-Application code is exceuted in the container
+7:-Clinet contacts RM/AM to monitor the status
+8:- AM unregister with RM.
