@@ -1,0 +1,47 @@
+Solution:- Real-case-sceanario:-
+
+Find out the answer for the below questions and then start cluster size planning:-
+
+1.	What is the volume of the incoming data – or daily or monthly basis? What will be the frequency of data arrival?
+2.	What will be my data archival policy? Would I store some data in compressed format?
+3.	What will be the replication factor – typically/default configured to 3.
+4.	How many tasks will each node in the cluster run?
+5.	How much space should I reserve for the intermediate outputs of mappers – a typical 25 -30% is recommended.
+6.	How space should I reserve for OS related activities?
+7.	How much space should I anticipate in the case of any volume increase over days, months and years?
+Once we get the answer of our drive capacity then we can work on estimating – number of nodes, memory in each node, how many cores in each node etc.
+Let’s take the case of stated questions.
+
+Daily Data:-
+Historical Data which will be present always 400TB say it (A)
+XML data	100GB say it (B)
+Data from other sources	50GB say it (C)
+Replication Factor (Let us assume 3)	3 say it (D)
+Space for intermediate MR output (30% Non HDFS) = 30% of (B+C) say it (E)
+Space for other OS and other admin activities (30% Non HDFS) = 30% of (B+C) say it (F)
+
+Daily Data = (D * (B + C)) + E+ F = 3 * (150) + 30 % of 150 + 30% of 150
+Daily Data = 450 + 45 + 45 = 540GB per day is absolute minimum.
+Add 10% buffer = 540 + 54 GB = 594 GB per Day
+
+Monthly Data = 30*594 + A = 18220 GB which nearly 18TB monthly approximately.
+Yearly Data = 18 TB * 12 = 216 TB
+Now we have got the approximate idea on yearly data, let us calculate other things:-
+
+Number of Node:-
+As a recommendation, a group of around 12 nodes, each with 2-4 disks (JBOD) of 1 to 4 TB capacity, will be a good starting point.
+216 TB/12 Nodes = 18 TB per Node in a Cluster of 12 nodes
+So we keep JBOD of 4 disks of 5TB each then each node in the cluster will have = 5TB*4 = 20 TB per node.
+So we got 12 nodes, each node with JBOD of 20TB HDD.
+
+Number of Core in each node:-
+A thumb rule is to use core per task. If tasks are not that much heavy then we can allocate 0.75 core per task.
+Say if the machine is 12 Core then we can run at most 12 + (.25 of 12) = 15 tasks; 0.25 of 12 is added with the assumption that 0.75 per core is getting used. So we can now run 15 Tasks in parallel. We can divide these tasks as 8 Mapper and 7 Reducers on each node.
+So till now, we have figured out 12 Nodes, 12 Cores with 20TB capacity each.
+
+Memory (RAM) size:-
+This can be straight forward. We should reserve 1 GB per task on the node so 15 tasks means 15GB plus some memory required for OS and other related activities – which could be around 2-3GB.
+So each node will have 15 GB + 3 GB = 18 GB RAM.
+
+Network Configuration:-
+As data transfer plays the key role in the throughput of Hadoop. We should connect node at a speed of around 10 GB/sec at least.
