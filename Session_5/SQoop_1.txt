@@ -1,0 +1,21 @@
+Sqoop features :-
+
+Full load
+
+incremental load 
+
+Parallel import/Export :- sqoop use a Yarn framework.
+
+compression
+
+connection of all the major RDBMS database
+
+Kerberos security integration:- network authentication 
+
+load data dirctly to hive/hbase
+
+
+
+UPDATE mysql.user SET authentication_string = PASSWORD('Test@123')
+
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'Test@123';

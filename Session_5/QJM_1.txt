@@ -1,0 +1,36 @@
+Shared storage:-
+
+The standby Node and the active namnode keep in sync of  each other by using the shared storage device.
+the active name node logs the record of any modification done in its name space to edit logs presents in this shared storage.
+the standby nodes reades the changes made in the edit logs in this shared storage and applies it to its own namespace.
+now, in case failover, the standby updates its metadata info using the edit logs in the shared storage first then it takes responsibity of the active namenode.
+as a administrator , you must need to configure at least one fencing method to avoid the split-brain scenario.
+
+
+
+Gracefull failover :- we manually initiate the failover for routine maintainance
+Automatic failover :- 
+
+In this case , failover is initiated automatically in case of Namenode failure (unplanned event)
+Apache Zookper is taking care of HA in the cluster
+ZKFC is a client that also monitors and manages the namenode status.
+it is also responsible for monitoring the health of the name nodes 
+
+Active nadmenodes (NN1)
+Zookeeper
+ZKFC
+journal nodes
+Namenode
+
+Standby Namenodes (NN2)
+
+Zookeeper
+ZKFC
+journal nodes
+Namenode
+
+Datanodes:-
+
+Zookeeper
+journal nodes
+datanode

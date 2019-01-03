@@ -1,0 +1,27 @@
+HDFS HA Architecture:-
+
+Active Name node
+Stand by name node
+
+
+Two HA techiques:-
+Quorum journal node
+Shared storage
+
+Quorum journal method:-
+
+1:-The standby Namenode and active name node keep in sync with each other through a separate group of nodes or daemons called journal nodes.
+2:-journal nodes follows a ring topology
+3:- active name node is responsible for updating the edit logs(meta data info.) present in the journal nodes.
+4:-standby node reads the changes made to edits logs in the journal node and applies it to ites own namespace in a constant manner.
+5:-During the failover, the standby makes sure that it has updated its meta data information from journal nodes before coming the new active namenode. this makes a current namespace state synchronized with the stat before failover.
+6:- Ip address of both the NAme node are availble to all the datanodes and they send the heart beats and block location information to both the namenode., this provies a fast failover as the Standby name node has an updated information about the block location in the cluster
+
+Fencing method:-
+only one Namenode write at time.
+the journal nodes performans this fencing methos by allowing only one namenode to be write at a time
+the standby namenode takes the responsiblity to read from the journal nodes
+
+
+
+
