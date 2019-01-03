@@ -1,0 +1,6 @@
+How to plan a Hadoop cluster with following requirements:
+Client is getting 100 GB Data daily in the form of XML, apart from this client is getting 50 GB data from different channels like social media, server logs, etc. which is unstructured. The historical data available in tapes is around 400 TB. For advanced analytics they want all the historical data in live repositories.
+What factors must be taken care while planning for cluster?
+How many nodes should be deployed?
+What should be the configuration of nodes (RAM, CPU, Disks)?
+What should be the network configuration?
