@@ -1,0 +1,104 @@
+    yum install krb5-server krb5-libs krb5-workstation
+    hostname
+
+   vi /etc/krb5.conf
+
+    vi /var/kerberos/krb5kdc/kdc.conf
+
+    kdb5_util create -s
+
+    vi /var/kerberos/krb5kdc/kadm5.acl
+
+    kadmin.local -q "addprinc hdfs/admin"
+
+   
+
+    
+
+   service krb5kdc start
+
+  service krb5kdc status
+
+   
+
+r
+
+vi /var/log/krb5kdc.log
+
+  
+
+   service kadmin start
+
+    service kadmin status
+
+
+
+   chkconfig krb5kdc on
+
+
+
+   chkconfig kadmin on
+
+
+
+   kadmin -p hdfs/admin
+
+    
+
+ list_principals
+
+    
+
+addprinc user1
+
+    kinit user1
+
+    klist -e
+
+
+
+Java -version
+
+
+
+Wget http://download.oracle.com/otn-pub/java/jce/7/UnlimitedJCEPolicyJDK7.zip
+
+cd /usr/java/jdk1.7.0_67-cloudera/jre/lib/security
+
+ls
+
+
+
+
+
+yum install  krb5-workstation pam_krb5
+
+Cd ~
+
+kadmin -p hdfs/admin
+
+addprinc -randkey cloudera-scm/admin@TEST.COM
+Exit
+
+
+
+kadmin -p hdfs/admin
+
+xst -k cmf.keytab cloudera-scm/admin@TEST.COM
+
+mv cmf.keytab /etc/cloudera-scm-server/
+
+chown -R cloudera-scm:cloudera-scm /etc/cloudera-scm-server/cmf.keytab
+
+
+
+chmod 600 /etc/cloudera-scm-server/cmf.keytab
+
+vi /etc/cloudera-scm-server/cmf.principal
+
+  cloudera-scm/admin@TEST.COM
+
+chown -R cloudera-scm:cloudera-scm /etc/cloudera-scm-server/cmf.principal
+
+chmod 600 /etc/cloudera-scm-server/cmf.principal
+
