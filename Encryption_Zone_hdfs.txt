@@ -1,0 +1,23 @@
+Encryption Zone in HDFS :-
+
+Hadoop is a sweet spot:-
+Excellent performance
+Safe from os attacks
+App trasnparancy
+Easy to deploy
+
+Architectural Concepts:-
+EZ (Encryption Zone)
+Key typs : EZ keys
+KMS (Key managment server)
+Key handling During  Writes and reads
+
+EZ (Encryption Zone):-
+
+Dirctory whoes contents are encrypted on write and decrypted on read
+  Encryption is trasparent to applications 
+  no code changes required
+  
+invariant :-
+
+Encrytion Zones cannot be nested.
