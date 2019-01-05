@@ -1,0 +1,14 @@
+Back Ground Kerberos:-
+
+Kerberos is a NETWORK AUTHENTICATION protocol.
+
+Realm:- authentication administrative domain
+Principals :- are the entries in the kerberos database. Each user, host, service is a given principal.
+Tickets:- are is issued by the authentication server. clint present tickts to the application server to demonstrate the authenticity of their identity.
+Each ticket has an expiration and renewable time.
+keytabs:- stores long-term keys for one or more principals.
+
+KDC:- key distribution center
+Database :- contains user and service entries( user's prinicpal, maximum validaity, maximum renewable time, password expiration. etc)
+AS (Authentication service) :- replies to the authentication requests from the client. the As sends TGT back which can be used by the user.
+TGS:- ticket granting server :- distribute service tickets based on the TGT.
