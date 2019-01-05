@@ -1,0 +1,116 @@
+CDH implements the Advanced Encryption Standard New Instructions (AES-NI), which provide substantial performance improvements.
+To get these improvements, you need a recent version of libcrypto.so
+To verify that a client host is ready to make use of the AES-NI instruction set optimization for HDFS encryption at rest, use the following command:
+
+hadoop checknative
+
+You should see a response such as the following:
+
+14/12/12 13:48:39 INFO bzip2.Bzip2Factory: Successfully loaded & initialized native-bzip2
+library system-native14/12/12 13:48:39 INFO zlib.ZlibFactory: Successfully loaded & initialized native-zlib library
+Native library checking:
+hadoop:  true /usr/lib/hadoop/lib/native/libhadoop.so.1.0.0
+zlib:    true /lib64/libz.so.1
+snappy:  true /usr/lib64/libsnappy.so.1
+lz4:     true revision:99
+bzip2:   true /lib64/libbz2.so.1
+openssl: true /usr/lib64/libcrypto.so
+
+If you see true in the openssl row, Hadoop has detected the right version of libcrypto.so and optimization will work. If you see false in this row, you do not have the right version.
+
+If you do not have the right version:-
+
+RHEL/CentOS 6.5 or later
+
+The installed version of libcrypto.so supports AES-NI, but you need to install the openssl-devel package on all clients:
+
+$ sudo yum install openssl-devel
+
+Note: Run above “yum install openssl-devl“ only if openssl: true /usr/lib64/libcrypto.so is not present.
+
+Step 2: Adding the KMS Service
+
+Make sure you have performed the steps described in Optimizing for HDFS Data at Rest Encryption, depending on the operating system you are using.
+On the Cloudera Manager Home page, click  to the right of the cluster name and select Add a Service. A list of service types display. You can add one type of service at a time.
+Select the Java KeyStore KMS service and click Continue.
+
+Customize the assignment of role instances to hosts. You can click theView By Host button for an overview of the role assignment by hostname ranges.
+
+Click the field below the Key Management Server (KMS) role to display a dialog containing a list of hosts. Select the host for the new KMS role and click OK.
+
+Review and modify the JavaKeyStoreProvider Directory configuration setting if required and click Continue. The Java KeyStore KMS service is started.
+
+Click Continue, then click Finish. You are returned to the Home page.
+
+Verify the new Java KeyStore KMS service has started properly by checking its health status. If the Health Status is Good, then the service started properly.
+
+Step 3:- Enabling Java KeyStore KMS for the HDFS Service
+
+Go to the HDFS service.
+
+Click the Configuration tab.
+
+Select Scope > HDFS (Service-Wide).
+
+Select Category > All.
+
+Locate the KMS Service property or search for it by typing its name in the Search box.
+Select the Java KeyStore KMS radio button for the KMS Service property.
+Click Save Changes.
+Restart your cluster.
+
+On the Home page, click  to the right of the cluster name and select Restart.
+
+Click Restart that appears in the next screen to confirm. TheCommand Details window shows the progress of stopping services.
+When All services successfully started appears, the task is complete and you can close the Command Details window.
+Deploy client configuration.
+
+1. On the Home page, click  to the right of the cluster name and select Deploy Client Configuration.
+2. Click Deploy Client Configuration.
+
+Step 4: Configuring Encryption Properties for the HDFS and NameNode
+
+Configure the following properties to select the encryption algorithm and KeyProvider that will be used during encryption. If you do not modify these properties, the default values will use AES-CTR to encrypt your data.
+
+Step 5: Creating Encryption Key and Zones
+
+Use below command to create Encryption key:-
+
+hadoop key create mykey
+
+mykey has not been created. org.apache.hadoop.security.authorize.AuthorizationException: User:root not allowed to do ‘CREATE_KEY’ on ‘mykey’
+
+KMS permissions are only available to super user `admin`, not even to root
+
+su admin
+hadoop key create mykey
+mykey has been successfully created with options Options{cipher=’AES/CTR/NoPadding’, bitLength=128, description=’null’, attributes=null}.                                          
+
+KMSClientProvider[http://localhost:16000/kms/v1/] has been updated.
+
+Use below command to create Encryption Zone:-
+
+hadoop fs -mkdir /tmp/zone
+Change to hdfs user and use Encryption Key to Create Encryption Zone
+su hdfs
+Create encryption zone and link to the key
+hdfs crypto -createZone -keyName mykey -path /tmp/zone 
+
+Added encryption zone /tmp/zone
+Create a file, put it in your zone and ensure the file can be decrypted for this logged in user need to be `admin` again.
+exit
+su admin
+cat /tmp/hellohadoop        
+
+hello hadoop
+
+hadoop fs -put /tmp/hellohadoop /tmp/zone
+Now as `admin` we can decrypt the file in the encryption zone
+hadoop fs -cat /tmp/zone/hellohadoop
+hello Hadoop
+Now let’s try that again as `hdfs` user
+exit
+su hdfs
+let’s see the raw file
+hdfs@localhost$ hadoop fs -cat /.reserved/raw/tmp/zone/hellohadoop
+*lm #1 !/ 4J
